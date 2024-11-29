@@ -23,7 +23,40 @@ class LinkGame {
             '文': ['兴']
         };
 
+        // 绑定按钮事件
+        document.getElementById('start-game1').addEventListener('click', () => this.showGame1());
+        document.getElementById('start-game2').addEventListener('click', () => this.showGame2());
         document.getElementById('new-game').addEventListener('click', () => this.startNewGame());
+        document.getElementById('back-to-menu').addEventListener('click', () => this.backToMenu());
+    }
+
+    // 显示游戏1界面
+    showGame1() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game1-screen').classList.remove('hidden');
+        document.getElementById('game2-screen').classList.add('hidden');
+        this.startNewGame();
+    }
+
+    // 显示游戏2界面
+    showGame2() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('game1-screen').classList.add('hidden');
+        document.getElementById('game2-screen').classList.remove('hidden');
+        rollingGame.init();
+    }
+
+    // 返回主菜单
+    backToMenu() {
+        // 清理当前游戏状态
+        this.clearBoard();
+        if (this.timer) {
+            clearInterval(this.timer);
+        }
+        // 显示开始界面
+        document.getElementById('start-screen').classList.remove('hidden');
+        document.getElementById('game1-screen').classList.add('hidden');
+        document.getElementById('game2-screen').classList.add('hidden');
     }
 
     // 初始化游戏
@@ -427,6 +460,188 @@ class LinkGame {
     }
 }
 
-// 创建游戏实例并开始新游戏
+// 游戏2：称呼生成器
+class RollingGame {
+    constructor() {
+        // 基础称呼列表
+        this.normalTitles = [
+            '勇士', '智者', '英雄', '冒险家',
+            '艺术家', '梦想家', '领袖', '创造者', '探索者',
+            '战士', '诗人', '音乐家', '科学家', '思想家',
+            '建筑师', '工程师', '医生', '教师', '作家',
+            '运动员', '演员', '画家', '舞者', '摄影师',
+            '程序员', '设计师', '厨师', '园丁', '宇航员',
+            '魔法师', '侦探', '发明家', '哲学家', '考古学家',
+            '驯兽师', '飞行员', '船长', '指挥家', '雕塑家',
+            '旅行家', '收藏家', '鉴赏家', '守护者', '传承者',
+            '先驱者', '实践者', '追梦人', '开拓者', '引路人'
+        ];
+
+        // 特殊称呼及其权重
+        this.specialTitles = [
+            { title: '沙雕', weight: 30 },   // 最高概率
+            { title: '黑子', weight: 15 },
+            { title: '妻奴', weight: 15 },
+            { title: '天才', weight: 15 }
+        ];
+
+        // 计算总权重（普通称呼每个权重0.5）
+        this.totalWeight = this.specialTitles.reduce((sum, item) => sum + item.weight, 0) + this.normalTitles.length * 0.5;
+
+        this.rollingInterval = null;
+        this.currentIndex = 0;
+        this.isRolling = false;
+        this.fireworksContainer = document.querySelector('.fireworks-container');
+
+        // 绑定按钮事件
+        const stopButton = document.getElementById('game2-stop');
+        stopButton.addEventListener('click', () => this.toggleRolling());
+        document.getElementById('game2-back').addEventListener('click', () => game.backToMenu());
+    }
+
+    // 获取随机称呼
+    getRandomTitle() {
+        const rand = Math.random() * this.totalWeight;
+        let accumWeight = 0;
+
+        // 先检查特殊称呼
+        for (const special of this.specialTitles) {
+            accumWeight += special.weight;
+            if (rand < accumWeight) {
+                return special.title;
+            }
+        }
+
+        // 如果没有命中特殊称呼，则从普通称呼中随机选择（概率降低）
+        if (Math.random() < 0.5) {  // 进一步降低普通称呼概率
+            return this.normalTitles[Math.floor(Math.random() * this.normalTitles.length)];
+        } else {
+            // 未选中普通称呼时，重新从特殊称呼中选择
+            const specialIndex = Math.floor(Math.random() * this.specialTitles.length);
+            return this.specialTitles[specialIndex].title;
+        }
+    }
+
+    // 开始滚动
+    startRolling() {
+        if (this.isRolling) return;
+        this.isRolling = true;
+        
+        const rollingText = document.getElementById('rolling-text');
+        this.rollingInterval = setInterval(() => {
+            // 使用新的随机称呼方法
+            const randomTitle = this.getRandomTitle();
+            const colorClass = 'color-' + (Math.floor(Math.random() * 6) + 1);
+            
+            // 更新显示
+            rollingText.className = 'rolling-text ' + colorClass;
+            rollingText.textContent = randomTitle;
+        }, 50);
+    }
+
+    // 创建烟花效果
+    createFirework(x, y, color) {
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        firework.style.left = x + 'px';
+        firework.style.top = y + 'px';
+        firework.style.backgroundColor = color;
+        this.fireworksContainer.appendChild(firework);
+
+        // 创建粒子
+        for (let i = 0; i < 30; i++) {  
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.backgroundColor = color;
+            
+            // 随机方向
+            const angle = (Math.PI * 2 * i) / 30;
+            const velocity = 30 + Math.random() * 70;  
+            particle.style.setProperty('--dx', Math.cos(angle) * velocity + 'px');
+            particle.style.setProperty('--dy', Math.sin(angle) * velocity + 'px');
+            
+            this.fireworksContainer.appendChild(particle);
+        }
+
+        // 清理动画元素
+        setTimeout(() => {
+            firework.remove();
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach(p => p.remove());
+        }, 1000);
+    }
+
+    // 创建多个烟花
+    createFireworks() {
+        const colors = ['#f44336', '#2196F3', '#4CAF50', '#FF9800', '#9C27B0', '#00BCD4'];
+        const text = document.getElementById('rolling-text');
+        const rect = text.getBoundingClientRect();
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        
+        // 创建20个烟花
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+                let x, y;
+                
+                if (i < 5) {  
+                    x = rect.left - 50 + Math.random() * (rect.width + 100);  
+                    y = rect.top - 50 + Math.random() * (rect.height + 100);
+                } else {
+                    // 其他的在屏幕范围内随机分布，但更集中在中心区域
+                    x = screenWidth * 0.2 + Math.random() * (screenWidth * 0.6);  
+                    y = screenHeight * 0.1 + Math.random() * (screenHeight * 0.6);  
+                }
+                
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                this.createFirework(x, y, color);
+            }, i * 80);  
+        }
+
+        // 0.5秒后再来一波烟花
+        setTimeout(() => {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const x = screenWidth * 0.1 + Math.random() * (screenWidth * 0.8);
+                    const y = screenHeight * 0.1 + Math.random() * (screenHeight * 0.6);
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    this.createFirework(x, y, color);
+                }, i * 80);
+            }
+        }, 500);
+    }
+
+    // 切换滚动状态
+    toggleRolling() {
+        const stopButton = document.getElementById('game2-stop');
+        if (this.isRolling) {
+            this.stopRolling();
+            stopButton.textContent = '继续';
+            this.createFireworks();
+        } else {
+            this.startRolling();
+            stopButton.textContent = '停止';
+        }
+    }
+
+    // 停止滚动
+    stopRolling() {
+        if (!this.isRolling) return;
+        clearInterval(this.rollingInterval);
+        this.isRolling = false;
+    }
+
+    // 初始化游戏
+    init() {
+        const stopButton = document.getElementById('game2-stop');
+        stopButton.textContent = '停止';
+        this.stopRolling();
+        this.startRolling();
+    }
+}
+
+// 创建游戏实例
 const game = new LinkGame();
-game.startNewGame();
+const rollingGame = new RollingGame();

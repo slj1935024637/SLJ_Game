@@ -5,19 +5,35 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: 0;
+    padding: 0;
     min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 .container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(4px);
+    padding: 30px;
+    margin: 20px auto;
+    max-width: 800px;
 }
 
 .header {
@@ -244,4 +260,350 @@ body {
         transform: translate(-50%, -50%) scale(1) translateY(-100px);
         opacity: 0;
     }
+}
+
+/* 开始界面样式 */
+.start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    z-index: 1000;
+}
+
+.start-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.start-container h1 {
+    font-size: 48px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.game-button {
+    padding: 15px 40px;
+    font-size: 24px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 200px;
+}
+
+.game-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.back-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #666;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+}
+
+.back-button:hover {
+    background-color: #555;
+}
+
+.game-screen {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 游戏2专属容器样式 */
+#game2-screen .container {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 30px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    padding: 40px;
+    margin: 40px auto;
+    max-width: 700px;
+    position: relative;
+    overflow: hidden;
+}
+
+#game2-screen .container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    pointer-events: none;
+}
+
+/* 游戏2的header样式 */
+#game2-screen .header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+#game2-screen .button-group {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+#game2-screen h1 {
+    margin: 0;
+    padding: 15px 0;
+    color: #2c3e50;
+    font-size: 2.8em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: 800;
+    letter-spacing: 3px;
+    background: linear-gradient(45deg, #2c3e50, #3498db);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+}
+
+/* 称呼容器样式 */
+.title-container {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 36px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.title-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(255, 255, 255, 0) 70%
+    );
+    opacity: 0.5;
+    animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+}
+
+.title-text {
+    color: #2c3e50;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.rolling-text {
+    display: inline-block;
+    min-width: 150px;
+    font-weight: bold;
+    margin-left: 15px;
+    padding: 8px 20px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.rolling-text::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.1) 100%
+    );
+    z-index: -1;
+    transition: transform 0.3s ease;
+}
+
+.rolling-text:hover::after {
+    transform: translateX(100%);
+}
+
+/* 按钮样式优化 */
+#game2-screen .button-group button {
+    padding: 15px 0;
+    width: 160px;
+    font-size: 18px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+#game2-screen .button-group button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+#game2-screen .button-group button:hover::before {
+    left: 100%;
+}
+
+.stop-button {
+    background: linear-gradient(45deg, #ff6b6b, #f44336);
+    color: white;
+    box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3);
+}
+
+.stop-button:hover {
+    background: linear-gradient(45deg, #f44336, #d32f2f);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(244, 67, 54, 0.4);
+}
+
+.back-button {
+    background: linear-gradient(45deg, #4facfe, #2196F3);
+    color: white;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.back-button:hover {
+    background: linear-gradient(45deg, #2196F3, #1976D2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
+}
+
+/* 称呼的颜色类 */
+.color-1 { color: #f44336; text-shadow: 0 0 5px rgba(244, 67, 54, 0.3); }
+.color-2 { color: #2196F3; text-shadow: 0 0 5px rgba(33, 150, 243, 0.3); }
+.color-3 { color: #4CAF50; text-shadow: 0 0 5px rgba(76, 175, 80, 0.3); }
+.color-4 { color: #FF9800; text-shadow: 0 0 5px rgba(255, 152, 0, 0.3); }
+.color-5 { color: #9C27B0; text-shadow: 0 0 5px rgba(156, 39, 176, 0.3); }
+.color-6 { color: #00BCD4; text-shadow: 0 0 5px rgba(0, 188, 212, 0.3); }
+
+/* 烟花动画样式 */
+.fireworks-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+}
+
+.firework {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(30);
+        opacity: 0;
+    }
+}
+
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    animation: shoot 0.5s ease-out forwards;
+}
+
+@keyframes shoot {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(var(--dy)) translateX(var(--dx));
+        opacity: 0;
+    }
+}
+
+h1 {
+    color: #2c3e50;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 2px;
 }

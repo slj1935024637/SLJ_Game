@@ -3,20 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>连连看</title>
+    <title>游戏集合</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>连连看</h1>
-            <div class="info">
-                <div class="score">剩余时间: <span id="timer">120</span>秒</div>
-                <div class="score">剩余方块: <span id="remaining">0</span></div>
+    <div id="start-screen" class="start-screen">
+        <div class="start-container">
+            <h1>游戏集合</h1>
+            <div class="button-group">
+                <button id="start-game1" class="game-button">连连看</button>
+                <button id="start-game2" class="game-button">游戏2</button>
             </div>
-            <button id="new-game">新游戏</button>
         </div>
-        <div id="game-board"></div>
+    </div>
+    <div id="game1-screen" class="game-screen hidden">
+        <div class="container">
+            <div class="header">
+                <h1>连连看</h1>
+                <div class="info">
+                    <div class="score">剩余时间: <span id="timer">120</span>秒</div>
+                    <div class="score">剩余方块: <span id="remaining">0</span></div>
+                </div>
+                <div class="button-group">
+                    <button id="new-game">新游戏</button>
+                    <button id="back-to-menu" class="back-button">返回菜单</button>
+                </div>
+            </div>
+            <div id="game-board"></div>
+        </div>
+    </div>
+    <div id="game2-screen" class="game-screen hidden">
+        <div class="fireworks-container"></div>
+        <div class="container">
+            <div class="header">
+                <div class="button-group">
+                    <button id="game2-back" class="back-button">返回菜单</button>
+                    <button id="game2-stop" class="stop-button">停止</button>
+                </div>
+                <h1>你是谁？</h1>
+            </div>
+            <div class="title-container">
+                <span class="title-text">你是一个：</span>
+                <span id="rolling-text" class="rolling-text"></span>
+            </div>
+        </div>
     </div>
     <script src="game.js"></script>
 </body>
