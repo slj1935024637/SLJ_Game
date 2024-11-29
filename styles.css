@@ -1,0 +1,247 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.info {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0;
+}
+
+.score {
+    font-size: 18px;
+    color: #333;
+}
+
+#new-game {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#new-game:hover {
+    background-color: #45a049;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2px;
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.tile {
+    width: 60px;
+    height: 60px;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.tile.selected {
+    background-color: #e3f2fd;
+    border-color: #2196F3;
+    box-shadow: 0 0 10px rgba(33,150,243,0.3);
+}
+
+.tile.matched {
+    visibility: hidden;
+}
+
+/* 方块颜色 */
+.tile.yellow-pair {
+    background-color: #FFF3E0;
+    border-color: #FFB74D;
+    color: #E65100;
+}
+
+.tile.black-pair {
+    background-color: #ECEFF1;
+    border-color: #90A4AE;
+    color: #263238;
+}
+
+.tile.green-pair {
+    background-color: #E8F5E9;
+    border-color: #81C784;
+    color: #2E7D32;
+}
+
+.tile.blue-pair {
+    background-color: #E3F2FD;
+    border-color: #64B5F6;
+    color: #1565C0;
+}
+
+/* 选中状态的颜色 */
+.tile.yellow-pair.selected {
+    background-color: #FFE0B2;
+    border-color: #FF9800;
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
+}
+
+.tile.black-pair.selected {
+    background-color: #CFD8DC;
+    border-color: #607D8B;
+    box-shadow: 0 0 10px rgba(96, 125, 139, 0.3);
+}
+
+.tile.green-pair.selected {
+    background-color: #C8E6C9;
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+.tile.blue-pair.selected {
+    background-color: #BBDEFB;
+    border-color: #2196F3;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+}
+
+/* 悬停效果 */
+.tile.yellow-pair:hover {
+    background-color: #FFE0B2;
+}
+
+.tile.black-pair:hover {
+    background-color: #CFD8DC;
+}
+
+.tile.green-pair:hover {
+    background-color: #C8E6C9;
+}
+
+.tile.blue-pair:hover {
+    background-color: #BBDEFB;
+}
+
+/* 连线样式 */
+.line {
+    position: absolute;
+    background-color: #4CAF50;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.8;
+    border-radius: 2px;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    height: 6px;
+}
+
+.line.temp {
+    animation: glowFadeOut 0.8s forwards;
+}
+
+@keyframes glowFadeOut {
+    0% { 
+        opacity: 1;
+        box-shadow: 0 0 10px rgba(76, 175, 80, 0.8);
+    }
+    50% {
+        opacity: 0.8;
+        box-shadow: 0 0 15px rgba(76, 175, 80, 0.6);
+    }
+    100% { 
+        opacity: 0;
+        box-shadow: 0 0 20px rgba(76, 175, 80, 0);
+    }
+}
+
+/* 得分动画 */
+.score-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: bold;
+    padding: 20px 30px;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    animation: scorePopup 1s ease-out forwards;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+/* 默认颜色 */
+.score-animation.default {
+    color: #FF4081;
+}
+
+/* 特殊配对的颜色 */
+.score-animation.yellow {
+    color: #FFD700;
+}
+
+.score-animation.black {
+    color: #000000;
+}
+
+.score-animation.green {
+    color: #4CAF50;
+}
+
+.score-animation.blue {
+    color: #2196F3;
+}
+
+@keyframes scorePopup {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) translateY(-100px);
+        opacity: 0;
+    }
+}
